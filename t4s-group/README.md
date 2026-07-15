@@ -166,6 +166,62 @@ mark, tying the two divisions together visually.
 
 ---
 
+## Security
+
+This template ships with a baseline security layer — review and extend it
+before handling real client data.
+
+### Security headers
+
+`vercel.json` sets a Content-Security-Policy, `X-Frame-Options: DENY`,
+`X-Content-Type-Options: nosniff`, a restrictive `Permissions-Policy`, and
+HSTS on every response. If you add new external resources (a new font host,
+an embedded widget, a different image CDN), you'll need to extend the CSP's
+`img-src` / `font-src` / `frame-src` allow-list accordingly, or those
+resources will silently fail to load.
+
+### Wiring up the contact form
+
+The contact and quote-request forms submit to a serverless function at
+`api/contact.ts` (deployed automatically by Vercel — no extra setup needed
+for the endpoint itself). It currently:
+
+- Rejects anything that isn't a POST request
+- Silently discards spam caught by a honeypot field
+- Validates name / email / message server-side (never trust client JS alone)
+- Rate-limits by IP (see caveat below)
+- Sends email via [Resend](https://resend.com) once configured
+
+**To enable real email delivery:**
+
+1. Create a free [Resend](https://resend.com) account and verify a sending
+   domain (or use their test domain while developing)
+2. In Vercel: **Project → Settings → Environment Variables**, add:
+   - `RESEND_API_KEY` — from your Resend dashboard
+   - `CONTACT_TO_EMAIL` — the inbox that should receive submissions
+3. Redeploy
+
+Until those variables are set, the form still works end-to-end (validates,
+responds with success) but submissions are only logged server-side, not
+emailed — useful for testing the UI without setting up email first.
+
+> ⚠️ The in-memory rate limiter in `api/contact.ts` resets on every cold
+> start and isn't shared across concurrent function instances — it stops
+> casual/burst spam but isn't sufficient alone at real scale. For
+> production-grade protection, add [Upstash Redis](https://upstash.com)
+> (has a free tier, integrates directly with Vercel) or a captcha
+> (hCaptcha / Cloudflare Turnstile) on top of the honeypot.
+
+### Dependency scanning
+
+`.github/dependabot.yml` opens weekly PRs for outdated/vulnerable npm
+packages. Also turn on **Dependabot alerts** under your repo's
+**Settings → Code security and analysis** for real-time notifications
+between scheduled runs. Run `npm audit` locally any time for an on-demand
+check.
+
+---
+
 ## Deployment
 
 This is a static Vite build — deploy the `/dist` folder to any static host:
@@ -192,3 +248,10 @@ If deploying to a sub-path (not the domain root), set `base` in
 - [ ] Add a real privacy policy & terms of service page (currently `#` links
       in the footer)
 - [ ] Confirm the legal entity name in the footer copyright line
+- [ ] Set `RESEND_API_KEY` and `CONTACT_TO_EMAIL` in Vercel and verify a
+      real sending domain in Resend
+- [ ] Enable Dependabot alerts in repo settings
+- [ ] Consider adding a captcha or Upstash-backed rate limiting if you
+      expect meaningful traffic
+- [ ] Review the CSP allow-list in `vercel.json` against your final
+      image/font/embed sources
