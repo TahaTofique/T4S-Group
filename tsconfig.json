@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+    # Security patches are opened regardless of schedule — Dependabot alerts
+    # (Settings → Code security and analysis → Dependabot alerts) should also
+    # be enabled on the repo for real-time vulnerability notifications.
