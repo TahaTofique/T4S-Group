@@ -3,7 +3,15 @@ import type { ImgHTMLAttributes } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
-interface ImgProps extends ImgHTMLAttributes<HTMLImageElement> {
+// Framer Motion's motion.img redefines a handful of event handlers
+// (drag/animation events) with its own incompatible types, so those need to
+// be excluded from the native attribute set we accept and spread through.
+type NativeImgProps = Omit
+  ImgHTMLAttributes<HTMLImageElement>,
+  'onAnimationStart' | 'onAnimationEnd' | 'onDrag' | 'onDragStart' | 'onDragEnd'
+>
+
+interface ImgProps extends NativeImgProps {
   wrapperClassName?: string
 }
 
