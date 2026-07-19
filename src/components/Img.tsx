@@ -1,17 +1,12 @@
 import { useState } from 'react'
-import type { ImgHTMLAttributes } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
-// Framer Motion's motion.img redefines a handful of event handlers
-// (drag/animation events) with its own incompatible types, so those need to
-// be excluded from the native attribute set we accept and spread through.
-type NativeImgProps = Omit
-  ImgHTMLAttributes<HTMLImageElement>,
-  'onAnimationStart' | 'onAnimationEnd' | 'onDrag' | 'onDragStart' | 'onDragEnd'
->
-
-interface ImgProps extends NativeImgProps {
+interface ImgProps {
+  src: string
+  alt: string
+  loading?: 'lazy' | 'eager'
+  className?: string
   wrapperClassName?: string
 }
 
@@ -19,8 +14,14 @@ interface ImgProps extends NativeImgProps {
  * Drop-in replacement for <img> that shows a pulsing skeleton shimmer behind
  * the image until it finishes loading, then cross-fades the photo in.
  * Prevents the hard "pop-in" of images on slower connections.
+ *
+ * Deliberately accepts a narrow, explicit prop list (rather than spreading
+ * the full native <img> attribute set) — motion.img redefines several event
+ * handlers (onAnimationStart, onDrag, etc.) with its own incompatible types,
+ * so passing arbitrary native props through causes a type collision. Add a
+ * prop here explicitly if you need it rather than widening this to `...rest`.
  */
-export function Img({ className, wrapperClassName, alt, ...props }: ImgProps) {
+export function Img({ src, alt, loading = 'lazy', className, wrapperClassName }: ImgProps) {
   const [loaded, setLoaded] = useState(false)
 
   return (
@@ -29,8 +30,9 @@ export function Img({ className, wrapperClassName, alt, ...props }: ImgProps) {
         <span className="absolute inset-0 animate-pulse bg-gradient-to-br from-white/[0.04] via-white/[0.08] to-white/[0.04] bg-[length:200%_100%]" />
       )}
       <motion.img
-        {...props}
+        src={src}
         alt={alt}
+        loading={loading}
         onLoad={() => setLoaded(true)}
         initial={{ opacity: 0 }}
         animate={{ opacity: loaded ? 1 : 0 }}
