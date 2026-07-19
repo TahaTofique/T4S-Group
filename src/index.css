@@ -127,7 +127,17 @@
     100% { background-position: 0% center; }
   }
 
-  /* Slow, near-imperceptible zoom/pan for hero background photography */
+  /* Aurora background drift — compositor-only (transform), no JS per frame */
+  @keyframes drift-a {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(40px); }
+  }
+  @keyframes drift-b {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-50px); }
+  }
+  .animate-drift-a { animation: drift-a 28s ease-in-out infinite; }
+  .animate-drift-b { animation: drift-b 34s ease-in-out infinite; }
   @keyframes kenburns {
     0% { transform: scale(1) translate3d(0, 0, 0); }
     100% { transform: scale(1.12) translate3d(-1.5%, -1%, 0); }
@@ -138,6 +148,14 @@
 
   .section-pad {
     @apply px-6 py-24 sm:px-10 lg:px-16 lg:py-32;
+  }
+  /* Skips layout/paint work for sections currently off-screen — meaningful
+     win on a page with this many animated cards/images per section. The
+     intrinsic-size estimate just needs to be roughly right to avoid
+     scrollbar jumpiness; it doesn't need to be exact. */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
   }
   .container-max {
     @apply mx-auto max-w-7xl;

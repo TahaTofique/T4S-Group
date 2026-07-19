@@ -70,7 +70,7 @@ export default function Enterprises() {
       </section>
 
       {/* SERVICES */}
-      <section className="section-pad bg-ink/75 backdrop-blur-[2px]">
+      <section className="section-pad bg-ink/85 cv-auto">
         <div className="container-max">
           <SectionHeading
             eyebrow="What We Do"
@@ -88,7 +88,7 @@ export default function Enterprises() {
       <SectionDivider />
 
       {/* FEATURED PROJECTS */}
-      <section id="projects" className="section-pad bg-ink-raised/70 backdrop-blur-[2px]">
+      <section id="projects" className="section-pad bg-ink-raised/85 cv-auto">
         <div className="container-max">
           <SectionHeading eyebrow="Featured Projects" title="A sample of work in progress and completed." />
           <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -102,7 +102,7 @@ export default function Enterprises() {
       <SectionDivider />
 
       {/* GALLERY */}
-      <section className="section-pad bg-ink/75 backdrop-blur-[2px]">
+      <section className="section-pad bg-ink/85 cv-auto">
         <div className="container-max">
           <SectionHeading eyebrow="Gallery" title="From blueprint to build." />
           <div className="mt-12">
@@ -114,7 +114,7 @@ export default function Enterprises() {
       <SectionDivider />
 
       {/* PROCESS */}
-      <section className="section-pad bg-ink-raised/70 backdrop-blur-[2px]">
+      <section className="section-pad bg-ink-raised/85 cv-auto">
         <div className="container-max">
           <SectionHeading eyebrow="Our Process" title="Four stages. One accountable team." align="center" />
           <div className="mt-14">{data.process && <ProcessSteps steps={data.process} />}</div>
@@ -124,7 +124,7 @@ export default function Enterprises() {
       <SectionDivider />
 
       {/* CONTACT CTA */}
-      <section id="contact" className="section-pad bg-ink/75 backdrop-blur-[2px]">
+      <section id="contact" className="section-pad bg-ink/85 cv-auto">
         <div className="container-max grid grid-cols-1 gap-16 lg:grid-cols-2">
           <SectionHeading
             eyebrow="Start a Project"

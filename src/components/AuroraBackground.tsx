@@ -6,40 +6,39 @@ import { motion, useScroll, useTransform } from 'framer-motion'
  * (z-0 — every section/page must render above it, typically via a
  * `relative z-10` wrapper, which App.tsx already provides).
  *
- * Two layers:
- *  1. Aurora — large blurred color fields that drift on their own timers
- *     AND roll vertically with scroll position, so the backdrop feels like
- *     it's slowly rolling past as you read down the page.
- *  2. Grain — a faint animated noise texture (SVG turbulence) blended over
- *     everything, which is what separates "flat dark background" from a
- *     considered, filmic one.
+ * PERFORMANCE NOTE: the earlier version drove the blob "drift" via Framer
+ * Motion's `animate` prop, which re-runs a JS callback on every animation
+ * frame on the main thread, forever, on every page — the single biggest
+ * thing that made the site feel heavy. The drift now runs as a plain CSS
+ * @keyframes animation instead, handled entirely by the compositor: it's
+ * automatically paused when the tab isn't visible and respects
+ * prefers-reduced-motion via the global rule in index.css.
+ *
+ * The horizontal drift (CSS) and the scroll-linked vertical "roll" (Framer
+ * Motion) are deliberately applied to two nested elements rather than one —
+ * both ultimately animate `transform`, and having a CSS animation and a
+ * JS-driven inline style fight over the same property on the same element
+ * causes flicker/contention. Outer div = CSS drift, inner = scroll roll.
  */
 export function AuroraBackground() {
   const { scrollYProgress } = useScroll()
-  const rollA = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
-  const rollB = useTransform(scrollYProgress, [0, 1], ['0%', '14%'])
-  const rollC = useTransform(scrollYProgress, [0, 1], ['0%', '-10%'])
+  const rollA = useTransform(scrollYProgress, [0, 1], ['0%', '-14%'])
+  const rollB = useTransform(scrollYProgress, [0, 1], ['0%', '10%'])
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-ink" aria-hidden>
-      <motion.div
-        style={{ y: rollA }}
-        animate={{ x: [0, 40, 0] }}
-        transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute left-[-10%] top-[-10%] h-[46rem] w-[46rem] rounded-full bg-primary/[0.16] blur-[140px]"
-      />
-      <motion.div
-        style={{ y: rollB }}
-        animate={{ x: [0, -50, 0] }}
-        transition={{ duration: 34, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute right-[-15%] top-[30%] h-[40rem] w-[40rem] rounded-full bg-gold/[0.07] blur-[140px]"
-      />
-      <motion.div
-        style={{ y: rollC }}
-        animate={{ x: [0, 30, 0] }}
-        transition={{ duration: 40, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute bottom-[-15%] left-[15%] h-[42rem] w-[42rem] rounded-full bg-primary-light/[0.10] blur-[150px]"
-      />
+      <div className="animate-drift-a absolute left-[-10%] top-[-10%] h-[38rem] w-[38rem]">
+        <motion.div
+          style={{ y: rollA }}
+          className="h-full w-full rounded-full bg-primary/[0.14] blur-[100px] will-change-transform"
+        />
+      </div>
+      <div className="animate-drift-b absolute right-[-15%] top-[30%] h-[34rem] w-[34rem]">
+        <motion.div
+          style={{ y: rollB }}
+          className="h-full w-full rounded-full bg-gold/[0.06] blur-[100px] will-change-transform"
+        />
+      </div>
 
       <GrainLayer />
 
@@ -55,7 +54,7 @@ function GrainLayer() {
   if (!ready) return null
 
   return (
-    <svg className="absolute inset-0 h-full w-full opacity-[0.035] mix-blend-overlay">
+    <svg className="absolute inset-0 h-full w-full opacity-[0.03] mix-blend-overlay">
       <filter id="t4s-grain">
         <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
         <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0" />

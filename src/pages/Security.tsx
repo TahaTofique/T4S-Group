@@ -71,7 +71,7 @@ export default function Security() {
       </section>
 
       {/* SERVICES */}
-      <section id="services" className="section-pad bg-ink/75 backdrop-blur-[2px]">
+      <section id="services" className="section-pad bg-ink/85 cv-auto">
         <div className="container-max">
           <SectionHeading
             eyebrow="What We Do"
@@ -89,7 +89,7 @@ export default function Security() {
       <SectionDivider />
 
       {/* WHY CHOOSE US */}
-      <section className="section-pad bg-ink-raised/70 backdrop-blur-[2px]">
+      <section className="section-pad bg-ink-raised/85 cv-auto">
         <div className="container-max">
           <SectionHeading eyebrow="Why T4S Security" title="Discipline you can verify." align="center" />
           <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -103,7 +103,7 @@ export default function Security() {
       <SectionDivider />
 
       {/* INDUSTRIES */}
-      <section className="section-pad bg-ink/75 backdrop-blur-[2px]">
+      <section className="section-pad bg-ink/85 cv-auto">
         <div className="container-max">
           <SectionHeading eyebrow="Industries Served" title="Programs designed for your sector." />
           <div className="mt-12">{data.industries && <IndustriesGrid industries={data.industries} />}</div>
@@ -113,7 +113,7 @@ export default function Security() {
       <SectionDivider />
 
       {/* GALLERY */}
-      <section className="section-pad bg-ink-raised/70 backdrop-blur-[2px]">
+      <section className="section-pad bg-ink-raised/85 cv-auto">
         <div className="container-max">
           <SectionHeading eyebrow="Gallery" title="Personnel and operations in the field." />
           <div className="mt-12">
@@ -125,7 +125,7 @@ export default function Security() {
       <SectionDivider />
 
       {/* CAREERS */}
-      <section id="careers" className="section-pad bg-ink/75 backdrop-blur-[2px]">
+      <section id="careers" className="section-pad bg-ink/85 cv-auto">
         <div className="container-max">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -161,7 +161,7 @@ export default function Security() {
       <SectionDivider />
 
       {/* QUOTE FORM */}
-      <section id="quote" className="section-pad bg-ink-raised/70 backdrop-blur-[2px]">
+      <section id="quote" className="section-pad bg-ink-raised/85 cv-auto">
         <div className="container-max grid grid-cols-1 gap-16 lg:grid-cols-2">
           <SectionHeading
             eyebrow="Request a Quote"

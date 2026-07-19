@@ -98,7 +98,7 @@ export default function Landing() {
       {/* ---------------------------------------------------------------- */}
       {/* ABOUT + TIMELINE                                                  */}
       {/* ---------------------------------------------------------------- */}
-      <section id="about" className="section-pad relative overflow-hidden bg-ink/75 backdrop-blur-[2px]">
+      <section id="about" className="section-pad relative overflow-hidden bg-ink/85 cv-auto">
         <div className="container-max relative">
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
@@ -134,7 +134,7 @@ export default function Landing() {
       {/* ---------------------------------------------------------------- */}
       {/* COMPANY CARDS                                                     */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section-pad relative overflow-hidden bg-ink-raised/70 backdrop-blur-[2px]">
+      <section className="section-pad relative overflow-hidden bg-ink-raised/85 cv-auto">
         <div className="container-max relative">
           <SectionHeading
             eyebrow="Our Companies"
@@ -155,7 +155,7 @@ export default function Landing() {
       {/* ---------------------------------------------------------------- */}
       {/* CONTACT CTA                                                       */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section-pad bg-ink/75 backdrop-blur-[2px]">
+      <section className="section-pad bg-ink/85 cv-auto">
         <div className="container-max grid grid-cols-1 gap-16 lg:grid-cols-2">
           <div>
             <SectionHeading
